@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<title>OCP REST API to Buttons</title>
+
+	</head>
+	<body>
+
+		<div class="container">
+			<div class="header">
+				<h3 class="text-muted">OCP REST API to Buttons</h2>
+			</div>
+			<table>
+			<tr>
+			<td>
+			<div class="jumbotron">
+                <ul>
+                    <li>
+                        <a href="/image"  id="imagerecource">/image</a><br>
+                        <div>shows a webcam image of the OCP in theory ;)</div>
+
+                        Show Image <input type="checkbox" id="showimageCheckbox" value="True" onchange="setshowimage(this)"> 
+
+                    </li>
+                    <li>
+                        <a href="/key/enter" >/key/enter</a>
+                        <div>presses the ENTER key<br></div>
+                    </li> 
+                    <li>
+                        <a href="/key/back">/key/back</a>
+                        <div>presses the BACK key<br></div>
+                    </li>
+                    <li>
+                        <a href="/key/up">/key/up</a>
+                        <div>presses the UP key<br></div>
+                    </li>
+                    <li>
+                        <a href="/key/down">/key/down</a>
+                        <div>presses the DOWN key<br></div>
+                    </li>
+                    <li>
+                        <a href="/key/right">/key/right</a>
+                        <div>presses the RIGHT key<br></div>
+                    </li>
+                    <li>
+                        <a href="/key/left">/key/left</a>
+                        <div>presses the LEFT key<br></div>
+                    </li>
+                    <li>
+                        <a href="/key/leftmag">/key/leftmag</a>
+                        <div>presses the Left Magazine  key<br></div>
+                        <a href="/key/leftmag?timePressed=3000">Open Left Magazine (pressed 3 sec)</a><br>
+                    </li>
+                    <li>
+                        <a href="/key/rightmag">/key/rightmag</a>
+                        <div>presses the Right Magazine key<br></div>
+                        <a href="/key/rightmag?timePressed=3000">Open Right Magazine (pressed 3 sec)</a><br>
+                    </li>
+                    <li>
+                        <div>Key parameter:<br>
+                        timePressed=2000,<br>
+                        changes the time a button is pressed in milliseconds, default 100<br></div>
+                    </li>
+                </ul>
+            </div>
+			</td>
+			<td>
+			<div id="imageframe" style="display: none">
+				
+                <!-- static image -->
+                <!--p><img src="/static/image1.jpg?{{ range(1, 5000001) | random }}"></p-->
+                
+				<!-- live image /stream  with https://elinux.org/RPi-Cam-Web-Interface -->
+                {% if image %}
+				<p> <iframe
+      						src="http://127.0.0.1/html/min.php"
+      						width="200%" 
+      						height="400" 
+      						name="Pi Cam">
+				</iframe>
+				</p>
+				{% endif %}
+                
+			</div>
+			</td>
+			</tr>
+			</table>
+		</div>
+
+
+
+<script type="text/javascript">
+function getParam ( sname )
+{
+  var params = location.search.substr(location.search.indexOf("?")+1);
+  var sval = "";
+  params = params.split("&");
+    // split param and value into individual pieces
+    for (var i=0; i<params.length; i++)
+       {
+         temp = params[i].split("=");
+         if ( [temp[0]] == sname ) { sval = temp[1]; }
+       }
+  return sval;
+}
+
+
+var showimage =  getParam("showimage");
+if (showimage == 1) {
+document.getElementById('showimageCheckbox').checked = "True"
+document.getElementById('imagerecource').href ='/image?showimage=1'
+
+document.getElementById('imageframe').style.display = 'block'
+
+}
+
+function setshowimage(elmnt){
+
+document.getElementById('imageframe').style.display =elmnt.checked?'block':'none'
+document.getElementById('imagerecource').href =elmnt.checked?'/image?showimage=1':'/image'
+}
+</script>
+
+<script type="text/javascript">
+
+window.addEventListener("click", function(e) {
+    var href = e.target.getAttribute("href");
+    //if(href and document.getElementById('showimageCheckbox').checked ) {
+    if(href) {
+        location.href = href + "?showimage=1";
+        e.preventDefault();
+    }
+});
+
+</script>
+
+	</body>
+</html>
+
+										
